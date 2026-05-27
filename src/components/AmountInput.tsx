@@ -32,46 +32,9 @@ export function AmountInput({
     setAmount(preset.toString());
   };
 
-  const validation = getDrawAmountValidation(amount, creditLine);
-  const numAmount = validation.amount;
-  const describedBy = `${helperId} ${constraintsId} ${statusId}`;
-
-  const toneStyles = {
-    info: {
-      border: "border-blue-500/30",
-      bg: "bg-blue-500/10",
-      text: "text-blue-300",
-      icon: <Info className="w-4 h-4 flex-shrink-0" aria-hidden="true" />,
-    },
-    success: {
-      border: "border-emerald-500/30",
-      bg: "bg-emerald-500/10",
-      text: "text-emerald-300",
-      icon: <CheckCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />,
-    },
-    warning: {
-      border: "border-amber-500/30",
-      bg: "bg-amber-500/10",
-      text: "text-amber-300",
-      icon: <AlertTriangle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />,
-    },
-    danger: {
-      border: "border-destructive/30",
-      bg: "bg-destructive/10",
-      text: "text-destructive",
-      icon: <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />,
-    },
-  } as const;
-
-  const currentTone = toneStyles[validation.feedback.severity];
-  const inputStateClassName =
-    validation.feedback.severity === "danger"
-      ? "border-destructive/40"
-      : validation.feedback.severity === "warning"
-        ? "border-amber-500/40"
-        : validation.hasEnteredAmount
-          ? "border-blue-500/40"
-          : "border-border";
+  const numAmount = parseFloat(amount) || 0;
+  const isValid = numAmount > 0 && numAmount <= creditLine.available;
+  const describedBy = error ? `${helperId} ${errorId}` : helperId;
 
   return (
     <div className="space-y-8">

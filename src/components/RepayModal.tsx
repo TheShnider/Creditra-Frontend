@@ -1,5 +1,4 @@
-import React, { useState, useId } from 'react';
-import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import React, { useState } from 'react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { formatMoney, getRepayAmountValidation } from '../utils/amountValidation';
 import { PendingButton } from './PendingButton';
@@ -88,10 +87,6 @@ export function RepayModal({
   const [step, setStep] = useState<ModalStep>('input');
   const modalRef = useFocusTrap(true);
   const [amountStr, setAmountStr] = useState('');
-  const repayAmountInputId = useId();
-  const repayAmountHintId = `${repayAmountInputId}-hint`;
-  const repayAmountConstraintsId = `${repayAmountInputId}-constraints`;
-  const repayAmountStatusId = `${repayAmountInputId}-status`;
 
   const totalDue = creditLine.utilized;
   const accruedInterestEstimate = (creditLine.utilized * (creditLine.apr / 100)) / 12;
