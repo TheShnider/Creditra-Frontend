@@ -2,17 +2,42 @@ import React from 'react';
 import './SuccessState.css';
 
 interface SuccessStateProps {
+  /**
+   * Which flow just completed. Drives the copy: a draw confirms a
+   * disbursement, a repay confirms a balance restore, an evaluation
+   * confirms the request was queued.
+   */
   type: 'draw' | 'repay' | 'evaluation';
+  /** When supplied, surfaced so the user can copy a reference for support. */
   transactionId?: string;
+  /** Dismiss the success state and return to the dashboard. */
   onClose: () => void;
+  /**
+   * Optional handler for "view in history". When omitted the link is
+   * not rendered. The evaluation flow omits it because no transaction
+   * record exists yet at that point.
+   */
   onViewHistory?: () => void;
 }
 
-const SuccessState: React.FC<SuccessStateProps> = ({ 
-  type, 
-  transactionId, 
+/**
+ * Post-action confirmation surface shown after a draw, repay, or
+ * evaluation submission.
+ *
+ * The container carries `role="status" aria-live="polite"` so screen
+ * readers announce the success without preempting the user's next
+ * keystroke. The visual is a single accent checkmark with two paragraphs
+ * (what happened + what comes next) and an action pair.
+ *
+ * Purely presentational. The parent flow owns navigation and side
+ * effects; this component only renders the chosen copy and forwards the
+ * close/view-history callbacks.
+ */
+const SuccessState: React.FC<SuccessStateProps> = ({
+  type,
+  transactionId,
   onClose,
-  onViewHistory 
+  onViewHistory
 }) => {
   const getContent = () => {
     switch (type) {
