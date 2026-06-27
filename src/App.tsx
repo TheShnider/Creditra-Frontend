@@ -13,7 +13,8 @@ import HelpCenter from "./pages/HelpCenter";
 import { ShortcutHelpOverlay } from "./components/ShortcutHelpOverlay";
 import { SupportWidget } from "./components/SupportWidget";
 import { DutchAuctions } from "./pages/DutchAuctions";
-import AutopayPage from "./pages/AutopayPage";
+import LandingPage from "./components/LandingPage";
+import { RouteAnnouncer } from "./components/RouteAnnouncer";
 
 const isEditableTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -82,6 +83,7 @@ function App() {
     <ErrorBoundary>
       <WalletProvider>
         <BrowserRouter>
+          <RouteAnnouncer />
           <div className="app">
             <header className="header">
               <Link to="/" className="logo">
@@ -164,6 +166,7 @@ function App() {
             <main className="main">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/landing" element={<LandingPage />} />
                 <Route path="/transactions" element={<TransactionHistory />} />
                 <Route path="/credit-lines" element={<CreditLines />} />
                 <Route path="/help" element={<HelpCenter />} />
