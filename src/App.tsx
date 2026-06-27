@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes, Link, NavLink } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard";
 import { WalletProvider } from "./context/WalletContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { KycProvider } from "./context/KycContext";
 import { WalletButton } from "./components/WalletButton";
+import { KycDrawer, KycTriggerButton } from "./components/KycDrawer";
 import DrawCreditPage from "./pages/DrawCreditPage";
 import CreditLines from "./pages/CreditLines";
 import { TransactionHistory } from "./pages/TransactionHistory";
@@ -53,7 +55,9 @@ const isEditableTarget = (target: EventTarget | null) => {
 function App() {
   const [isShortcutHelpOpen, setIsShortcutHelpOpen] = useState(false);
   const [openedFromSettingsLink, setOpenedFromSettingsLink] = useState(false);
+  const [isKycDrawerOpen, setIsKycDrawerOpen] = useState(false);
   const settingsTriggerRef = useRef<HTMLButtonElement>(null);
+  const kycTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -76,6 +80,7 @@ function App() {
   return (
     <ErrorBoundary>
       <WalletProvider>
+        <KycProvider>
         <BrowserRouter>
           <div className="app">
             <header className="header">
@@ -146,6 +151,10 @@ function App() {
               >
                 Settings
               </button>
+              <KycTriggerButton
+                triggerRef={kycTriggerRef}
+                onClick={() => setIsKycDrawerOpen(true)}
+              />
               <WalletButton />
             </header>
             <main className="main">
@@ -169,8 +178,20 @@ function App() {
               onClose={() => setIsShortcutHelpOpen(false)}
               triggerRef={openedFromSettingsLink ? settingsTriggerRef : undefined}
             />
+            <KycDrawer
+              isOpen={isKycDrawerOpen}
+              onClose={() => setIsKycDrawerOpen(false)}
+              onResume={(stepId) => {
+                // Navigate to the KYC page with the step pre-selected.
+                // Replace with router.push('/kyc?step=' + stepId) when the
+                // full KYC page exists.
+                console.info('[KYC] Resume at step:', stepId);
+              }}
+              triggerRef={kycTriggerRef}
+            />
           </div>
         </BrowserRouter>
+        </KycProvider>
       </WalletProvider>
     </ErrorBoundary>
   );
