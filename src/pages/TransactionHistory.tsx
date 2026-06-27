@@ -193,7 +193,7 @@ function TransactionRow({
           </span>
         </td>
         <td
-          className="tx-amount"
+          className="tx-amount num-tabular"
           style={{
             color: isNegative
               ? COLOR.success
@@ -268,7 +268,7 @@ function TransactionRow({
                   <div className="tx-detail-item">
                     <span className="label">Amount</span>
                     <span
-                      className="value"
+                      className="value num-tabular"
                       style={{
                         color: isNegative ? COLOR.success : COLOR.accent,
                       }}
@@ -753,7 +753,7 @@ export function TransactionHistory() {
           </span>
           <div className="th-stat-content">
             <span className="th-stat-label">Total Drawn</span>
-            <span className="th-stat-value" style={{ color: COLOR.accent }}>
+            <span className="th-stat-value num-tabular" style={{ color: COLOR.accent }}>
               {fmt(stats.totalDrawn)}
             </span>
           </div>
@@ -767,7 +767,7 @@ export function TransactionHistory() {
           </span>
           <div className="th-stat-content">
             <span className="th-stat-label">Total Repaid</span>
-            <span className="th-stat-value" style={{ color: COLOR.success }}>
+            <span className="th-stat-value num-tabular" style={{ color: COLOR.success }}>
               {fmt(stats.totalRepaid)}
             </span>
           </div>
@@ -784,7 +784,7 @@ export function TransactionHistory() {
           </span>
           <div className="th-stat-content">
             <span className="th-stat-label">Total Interest</span>
-            <span className="th-stat-value" style={{ color: COLOR.warning }}>
+            <span className="th-stat-value num-tabular" style={{ color: COLOR.warning }}>
               {fmt(stats.totalInterest)}
             </span>
           </div>
@@ -799,7 +799,7 @@ export function TransactionHistory() {
           <div className="th-stat-content">
             <span className="th-stat-label">Current Debt</span>
             <span
-              className="th-stat-value"
+              className="th-stat-value num-tabular"
               style={{
                 color: stats.currentDebt > 0 ? COLOR.danger : COLOR.success,
               }}
