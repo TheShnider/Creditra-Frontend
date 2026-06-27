@@ -91,6 +91,7 @@ heading.
 | --- | --- | --- |
 | Form field errors | `role="alert"` (assertive) | `FormMessage` |
 | Copy-to-clipboard success | `aria-live="polite"` | `CopyToClipboard` |
+| Route changes | `role="status" aria-live="polite"` | `RouteAnnouncer` |
 | Post-action confirmation | `role="status" aria-live="polite"` | `SuccessState` |
 | Toast notifications | `role="status" aria-live="polite"` for info/success, `role="alert"` for error | `ToastContainer` |
 
@@ -122,6 +123,7 @@ The table below is updated on every accessibility-impacting PR. Status legend:
 | `Skeleton` | n/a | n/a | n/a | reduced-motion gated | OK |
 | `CopyToClipboard` | Real `<button>`; Enter copies | Specific `aria-label`; polite live region announces "Copied" | AA | n/a | OK |
 | `AccessibleTooltip` | Trigger is keyboard-focusable | `role="tooltip"`, `aria-describedby` | AA | n/a | OK |
+| `RouteAnnouncer` | n/a (route observer) | Updates `document.title`, meta description, and a polite live region | AA | n/a | OK |
 | `NotificationBell` | Tab/Enter; counter is decorative | `aria-label="Notifications, N unread"` | AA | n/a | OK |
 | `NotificationCenter` | Focus trap inside the panel | `role="dialog"`, category filters use `aria-pressed` | AA | reduced-motion gated | OK |
 | `ToastContainer` | Tab/Esc to dismiss | `role="status"` / `role="alert"` per severity | AA | reduced-motion gated | OK |
