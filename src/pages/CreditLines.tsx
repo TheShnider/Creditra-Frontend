@@ -1,11 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { StatusBadge } from "../components/StatusBadge";
-import CompareLinesPanel from "../components/CompareLinesPanel";
 import { MOCK_CREDIT_LINES } from "../data/mockData";
-import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
-import { useFocusTrap } from "../hooks/useFocusTrap";
-import { useInertBackdrop } from "../hooks/useInertBackdrop";
 import type {
   CreditLineStatus,
   SortField,
@@ -20,30 +16,11 @@ import {
   utilizationPct,
 } from "../utils/tokens";
 import "./CreditLines.css";
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-/** Human-readable label for each sort field — used in the accessible region label. */
-const SORT_LABELS: Record<SortField, string> = {
-  updatedAt: 'last updated',
-  status: 'status',
-  limit: 'credit limit',
-  utilization: 'utilization',
-  apr: 'APR',
-  riskScore: 'risk score',
-};
+import { NoLines } from "../components/illustrations";
 
 // ─── Credit Line Card ────────────────────────────────────────────────────────
 
-function CreditLineCard({
-  line,
-  isSelected,
-  onToggle,
-}: {
-  line: (typeof MOCK_CREDIT_LINES)[0];
-  isSelected: boolean;
-  onToggle: () => void;
-}) {
+function CreditLineCard({ line }: { line: (typeof MOCK_CREDIT_LINES)[0] }) {
   const pct = utilizationPct(line.utilized, line.limit);
   const level = getUtilizationLevel(line.utilized, line.limit);
   const swapTriggerRef = useRef<HTMLButtonElement>(null);
@@ -160,34 +137,6 @@ export default function CreditLines() {
   const [statusFilter, setStatusFilter] = useState<CreditLineStatus | "all">(
     "all",
   );
-  const [selectedLines, setSelectedLines] = useState<string[]>([]);
-  const [showCompare, setShowCompare] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-
-  // ── Collateral substitution modal state ──────────────────────────────────
-  type ModalTarget = {
-    line: typeof MOCK_CREDIT_LINES[0];
-    currentAsset: CollateralAsset | undefined;
-    triggerRef: React.RefObject<HTMLButtonElement | null>;
-  };
-  const [modalTarget, setModalTarget] = useState<ModalTarget | null>(null);
-
-  const handleSwapCollateral = (
-    line: typeof MOCK_CREDIT_LINES[0],
-    triggerRef: React.RefObject<HTMLButtonElement | null>,
-  ) => {
-    const currentAsset = findAssetByName(line.collateral);
-    setModalTarget({ line, currentAsset, triggerRef });
-  };
-
-  const handleModalClose = () => setModalTarget(null);
-
-  const handleModalSuccess = (incoming: CollateralAsset) => {
-    // In a real app: refetch or optimistically update the credit line list.
-    // For now we just close the modal — the parent knows which line was targeted.
-    setModalTarget(null);
-    void incoming; // consumed by parent via onSuccess callback
-  };
 
   const creditLines = MOCK_CREDIT_LINES;
 
@@ -381,7 +330,7 @@ export default function CreditLines() {
 
       {filteredAndSorted.length === 0 ? (
         <div className="cl-empty">
-          <div className="cl-empty-icon">💳</div>
+          <NoLines className="empty-state-illustration--muted" />
           <h3>No credit lines found</h3>
           <p>Apply for a credit line to get started</p>
           <Link to="/open-credit" className="cl-primary-btn">
@@ -391,12 +340,7 @@ export default function CreditLines() {
       ) : (
         <div className="cl-grid">
           {filteredAndSorted.map((line) => (
-            <CreditLineCard
-              key={line.id}
-              line={line}
-              isSelected={selectedLines.includes(line.id)}
-              onToggle={() => toggleSelection(line.id)}
-            />
+            <CreditLineCard key={line.id} line={line} />
           ))}
         </div>
       )}
